@@ -39,13 +39,8 @@ def render_page(app, protocol, cdn):
     """
     assert protocol in ('ws', 'http')
     meta = parse_app_metadata(app)
-    if cdn is True:
-        cdn = DEFAULT_CDN.format(version=version)
-    elif not cdn:
-        cdn = ''
-    else:  # user custom cdn
-        cdn = cdn.rstrip('/') + '/'
-
+    cdn = DEFAULT_CDN.format(version=version)
+    
     return _index_page_tpl.generate(title=meta.title or 'PyWebIO Application',
                                     description=meta.description, protocol=protocol,
                                     script=True, content='', base_url=cdn)
