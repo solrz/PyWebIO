@@ -463,16 +463,16 @@ def start_server_in_current_thread_session():
 
         set_ioloop(tornado.ioloop.IOLoop.current())  # to enable bokeh app
 
-        port = 0
+        port = 44444
         if os.environ.get("PYWEBIO_SCRIPT_MODE_PORT"):
             port = int(os.environ.get("PYWEBIO_SCRIPT_MODE_PORT"))
 
-        server, port = _setup_server(webio_handler=SingleSessionWSHandler, port=port, host='localhost',
+        server, port = _setup_server(webio_handler=SingleSessionWSHandler, port=port, host='0.0.0.0',
                                      websocket_max_message_size=parse_file_size('4G'))
         tornado.ioloop.IOLoop.current().spawn_callback(partial(wait_to_stop_loop, server=server))
 
         if "PYWEBIO_SCRIPT_MODE_PORT" not in os.environ:
-            tornado.ioloop.IOLoop.current().spawn_callback(open_webbrowser_on_server_started, 'localhost', port)
+            tornado.ioloop.IOLoop.current().spawn_callback(open_webbrowser_on_server_started, '0.0.0.0', port)
 
         tornado.ioloop.IOLoop.current().start()
         logger.debug('Tornado server exit')
